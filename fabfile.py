@@ -17,11 +17,14 @@ INSTALL_PACKAGES = [
    'python2.7-dev',
    'python-pip',
    'build-essential',
-   'python-scipy'
+   'python-scipy',
+   'pkg-config',
+   'libpng-dev',
+   'libfreetype6-dev',
+   'libpq-dev python-dev'
 ]
 
 ### ENVIRONMENTS ###
-
 
 def vagrant():
     """Defines the Vagrant virtual machine's environment variables.
@@ -34,15 +37,14 @@ def vagrant():
                                       stdout=subprocess.PIPE).communicate()[0]
     ssh_config = dict([l.strip().split() for l in raw_ssh_config.split("\n")
                        if l])
-    env.hosts = ['127.0.0.1:%s' % (ssh_config['Port'])]  #raw_ssh_config & ssh_config fing SSH port
-    env.user = ssh_config['User'] #defined username using ssh_config key
-    env.key_filename = ssh_config['IdentityFile'].replace('"', '') #SSH key - private key to make SSh connections
-    env.virtualenv = {'dir': '/server', 'name': 'venv'} #path to virtual env in VM
+    env.hosts = ['127.0.0.1:%s' % (ssh_config['Port'])]
+    env.user = ssh_config['User']
+    env.key_filename = ssh_config['IdentityFile'].replace('"', '')
+    env.virtualenv = {'dir': '/server', 'name': 'venv'}
 
 
 def bootstrap():
     """Set up and configure Vagrant to be able to serve the web app.
-
     Runs commands on the command line to configure the Ubuntu server.
     """
     sub_install_packages()
@@ -82,7 +84,6 @@ def sub_create_virtualenv():
 
 def sub_install_python_requirements():
     """Install the Flask apps' Python requirements into the virtualenv.
-
     We need to activate the virtualenv before installing into it. We do that
     with the command 'source /server/bin/activate'. The application requirements
     live in the requirements.txt file shared with the VM. This file lives at
@@ -92,7 +93,7 @@ def sub_install_python_requirements():
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
     # Install Python requirements
-    install = 'pip install -r /vagrant/flask_ml/requirements.txt'
+    install = 'pip install -r /vagrant/hs-698-project/requirements.txt'
     # Join and execute the commands
     run(activate + '; ' + install)
 
@@ -103,5 +104,5 @@ def dev_server():
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
     # Run the file run_api.py to start the Flask app
-    dev_server = 'python /vagrant/flask_ml/run_api.py'
+    dev_server = 'python /vagrant/hs-698-project/run_api.py'
     run(activate + '; ' + dev_server)
