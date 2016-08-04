@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Dataset</title>
+</head>
+    {% extends "base.html" %}
+    {% block content %}
+
+<body>
+    <div class="jumbotron">
+    <h2 align="center">CMS Dataset: "Report"</h2>
+    <h4 align="center">Medicare Physician and Other Supplier National Provider Identifier (NPI) Aggregate Report</h4>
+    </div>
+    <div align="center">
+    <div class="container-fluid">
+        <iframe width="2000px"
+            title="Medicare Physician and Other Supplier National Provider Identifier (NPI) Aggregate Report, Calendar Year 2014"
+            height="900px" src="https://data.cms.gov/w/4a3h-46r6/vmsd-2w5m?cur=_Nz67MfM6ft&from=root" frameborder="0"scrolling="no">
+         <a href="https://data.cms.gov/Public-Use-Files/Medicare-Physician-and-Other-Supplier-National-Pro/4a3h-46r6"
+           title="Medicare Physician and Other Supplier National Provider Identifier (NPI) Aggregate Report, Calendar Year 2014"
+           target="_blank">Medicare Physician and Other Supplier National Provider Identifier (NPI) Aggregate Report, Calendar Year 2014</a>
+        </iframe>
+    <!--<p><a href="http://www.socrata.com/" target="_blank">Powered by Socrata</a></p>-->
+    </div>
+
+        <div class="container-fluid">
+            <a href="/data" class="btn btn-info btn-lg" role="button">Return to Dataset List</a>
+        </div>
+    </div>
+</body>
+    {% endblock %}
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Costs: Demographics</title>
+</head>
+    {% extends "base.html" %}
+    {% block content %}
+<style>
+    body {
+      font: 10px sans-serif;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .bar {
+      fill: steelblue;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+    .bg-1 {
+        background-color: #6E658C;
+        color: #ffffff;
+    }
+    .bg-2 {
+        background-color: #A2A3A0;
+        color: #ffffff;
+    }
+    p {
+      font-size: 18px
+    }
+    li {
+      font-size: 18px
+    }
+    td {
+      font-size: 14px
+    }
+    #title {
+        color: #000000
+    }
+    th {
+      text-align: center;
+      font-size: 16px
+    }
+    #body {
+      padding:20px;
+      padding-bottom:10px;
+    }
+    #bodya {
+      padding-top:10px;
+    }
+
+</style>
+<body>
+<div class="jumbotron">
+    <h1 align="center">CMS Costs: Demographics</h1>
+    <div class="container">
+        <p class="text-center">This page explores the relationship between healthcare costs of the services and procedures
+            provided to CMS beneficiaries and the demographics of the beneficiaries' surveyed population. The demographics
+            examined include <strong>age, race, & gender</strong>.
+        </p>
+        <p class="text-center">
+            The total costs were examined for services and procedures provided under Medicare and Medicaid programs. The
+            values were standardized to remove any geographic differences and assure comparability across variables.
+        </p>
+    </div>
+    <div id="body"></div>
+    <div align="center">
+        <div class="container-fluid">
+            <a href="/cost" class="btn btn-info btn-lg" role="button">Return to State Cost Overview</a>
+        </div>
+    </div>
+</div>
+
+    <div class="container-fluid bg-1">
+        <h2 align="center">Age</h2>
+        <div class="container">
+            <h4 id="title">Notes:</h4>
+            <ul class="list">
+                <li>The age of beneficiaries are calculated at the end of the calendar year.</li>
+            </ul>
+            <h4 id="title">Takeways:</h4>
+            <ul class="list">
+                <li>There are consistent trends across CMS-related healthcare costs (all-inclusive medicare amount,
+                    medical-specific Medicare amount, and drug-related Medicare amount).</li>
+                <li>Beneficiaries aged <strong id="title">65-74</strong> and <strong id="title">75-84</strong> account
+                    for majority of the CMS healthcare costs (>50%) from services and procedures provided under Medicare
+                    and Medicaid. </li>
+                <li>The age <strong id="title">65-75</strong> cohort is the clear front-runner in health-related
+                    expenditures, indicating that it's common for a <strong id="title">higher frequency</strong> of services and
+                    procedures provided for patients in this age bracket.</li>
+            </ul>
+            <h3 id="title" align="center">CMS Cost by Age</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Cost Type</th>
+                            <th>Age 0-64</th>
+                            <th>Age 65-74</th>
+                            <th>age 75-84</th>
+                            <th>Age >84</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in costs_age %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                            <td align="center">{{row[3]}}</td>
+                            <td align="center">{{row[4]}}</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 id="title" align="center">Age Population Ratio</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th> </th>
+                            <th>Age 0-64</th>
+                            <th>Age 65-74</th>
+                            <th>age 75-84</th>
+                            <th>Age >84</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in age_ratio %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                            <td align="center">{{row[3]}}</td>
+                            <td align="center">{{row[4]}}</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container" align="center">
+            <!--<script src="//d3js.org/d3.v3.min.js"></script>-->
+            <script src={{ cost_demo_js }}></script>
+            <h2 align="center">Bar Chart: CMS Costs vs. Age</h2>
+            <script>
+
+                var margin = {top: 20, right: 20, bottom: 30, left: 400},
+                    width = 1560 - margin.left - margin.right,
+                    height = 500 - margin.top - margin.bottom;
+
+                var x0 = d3.scale.ordinal()
+                    .rangeRoundBands([0, width], .1);
+
+                var x1 = d3.scale.ordinal();
+
+                var y = d3.scale.linear()
+                    .range([height, 0]);
+
+                var color = d3.scale.ordinal()
+                    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+                var xAxis = d3.svg.axis()
+                    .scale(x0)
+                    .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left")
+                    .tickFormat(d3.format(".2s"));
+
+                var svg = d3.select("body").append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                d3.csv("{{ age_file }}", function(error, data) {
+                  if (error) throw error;
+
+                  var ageNames = d3.keys(data[0]).filter(function(key) { return key !== "costs"; });
+
+                  data.forEach(function(d) {
+                    d.ages = ageNames.map(function(name) { return {name: name, value: +d[name]}; });
+                  });
+
+                  x0.domain(data.map(function(d) { return d.costs; }));
+                  x1.domain(ageNames).rangeRoundBands([0, x0.rangeBand()]);
+                  y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
+
+                  svg.append("g")
+                      .attr("class", "x axis")
+                      .attr("transform", "translate(0," + height + ")")
+                      .call(xAxis);
+
+                  svg.append("g")
+                      .attr("class", "y axis")
+                      .call(yAxis)
+                    .append("text")
+                      .attr("transform", "rotate(-90)")
+                      .attr("y", 6)
+                      .attr("dy", ".71em")
+                      .style("text-anchor", "end")
+                      .text("Costs (U.S. Dollars ($)");
+
+                  var costs = svg.selectAll(".costs")
+                      .data(data)
+                    .enter().append("g")
+                      .attr("class", "costs")
+                      .attr("transform", function(d) { return "translate(" + x0(d.costs) + ",0)"; });
+
+                  costs.selectAll("rect")
+                      .data(function(d) { return d.ages; })
+                    .enter().append("rect")
+                      .attr("width", x1.rangeBand())
+                      .attr("x", function(d) { return x1(d.name); })
+                      .attr("y", function(d) { return y(d.value); })
+                      .attr("height", function(d) { return height - y(d.value); })
+                      .style("fill", function(d) { return color(d.name); });
+
+                  var legend = svg.selectAll(".legend")
+                      .data(ageNames.slice().reverse())
+                    .enter().append("g")
+                      .attr("class", "legend")
+                      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+                  legend.append("rect")
+                      .attr("x", width - 18)
+                      .attr("width", 18)
+                      .attr("height", 18)
+                      .style("fill", color);
+
+                  legend.append("text")
+                      .attr("x", width - 24)
+                      .attr("y", 9)
+                      .attr("dy", ".35em")
+                      .style("text-anchor", "end")
+                      .text(function(d) { return d; });
+
+                });
+
+            </script>
+    </div>
+
+    <div class="container-fluid bg-1">
+        <h2 align="center">Race/Ethnicity</h2>
+        <div class="container">
+            <h4 id="title">Notes:</h4>
+            <ul class="list">
+                <li>The race/ethnicity information is based on the CMS Chronic Conditions Data Warehouse (CWW) enrollment
+                    database.</li>
+                <li>The CWW research database was designed to make CMS data more readily available and prevent
+                    duplication of existing data. Race/ethnicity is classified using the Census surname lists and geography.
+                </li>
+            </ul>
+            <h4 id="title">Takeaways: </h4>
+            <ul class="list">
+                <li><strong id="title">Non-hispanic white</strong> beneficiaries account for majority of the CMS costs
+                    from healthcare-provided services and procedures across all categories (all-inclusive, medical-related,
+                    and drug-related). The data indicates that CMS services and procedures are mostly provided to
+                    non-hispanic white patients.</li>
+                <li><strong id="title">African-Americans</strong> and <strong id="title">Hispanics</strong> appear to be
+                    consistently ranked 2nd and 3rd, respectively.</li>
+                <li>The data appears to be skewed and may not be an accurate representation due to the <strong>low
+                    diversity</strong> within the surveyed population. The CMS beneficiaries population compromises
+                    mostly of patients with non-hispanic white backgrounds by a large margin of ~70%. There is an
+                    exceptionally small population of Native Americans (< 1%).</li>
+            </ul>
+            <h3 id="title" align="center">CMS Cost by Race/Ethnicity</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Cost Type</th>
+                            <th>Non-Hispanic White</th>
+                            <th>African American</th>
+                            <th>Asian Pacific Islander</th>
+                            <th>Hispanic</th>
+                            <th>Native American</th>
+                            <th>Other Race</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in costs_race %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                            <td align="center">{{row[3]}}</td>
+                            <td align="center">{{row[4]}}</td>
+                            <td align="center">{{row[5]}}</td>
+                            <td align="center">{{row[6]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 id="title" align="center">Race Population Ratio</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th> </th>
+                            <th>Non-Hispanic White</th>
+                            <th>African American</th>
+                            <th>Asian Pacific Islander</th>
+                            <th>Hispanic</th>
+                            <th>Native American</th>
+                            <th>Other Race</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in race_ratio %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                            <td align="center">{{row[3]}}</td>
+                            <td align="center">{{row[4]}}</td>
+                            <td align="center">{{row[5]}}</td>
+                            <td align="center">{{row[6]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2 align="center">Bar Chart: CMS Costs vs. Race/Ethnicity</h2>
+        <script>
+          var margin1 = {top: 20, right: 20, bottom: 30, left: 400},
+                width1 = 1560 - margin1.left - margin1.right,
+                height1 = 510 - margin1.top - margin1.bottom;
+
+            var x01 = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .1);
+
+            var x11 = d3.scale.ordinal();
+
+            var y1 = d3.scale.linear()
+                .range([height, 0]);
+
+            var color1 = d3.scale.ordinal()
+                .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+            var xAxis1 = d3.svg.axis()
+                .scale(x0)
+                .orient("bottom");
+
+            var yAxis1 = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(d3.format(".2s"));
+
+            var svg1 = d3.select("body").append("svg")
+                .attr("width", width1 + margin1.left + margin.right)
+                .attr("height", height1 + margin1.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+            d3.csv("{{ race_file }}", function(error, data1) {
+              if (error) throw error;
+
+              var raceNames = d3.keys(data1[0]).filter(function(key) { return key !== "costs"; });
+
+              data1.forEach(function(d1) {
+                d1.race = raceNames.map(function(name) { return {name: name, value: +d1[name]}; });
+              });
+
+              x01.domain(data1.map(function(d1) { return d1.costs; }));
+              x11.domain(raceNames).rangeRoundBands([0, x01.rangeBand()]);
+              y1.domain([0, d3.max(data1, function(d1) { return d3.max(d1.race, function(d1) { return d1.value; }); })]);
+
+              svg1.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height1 + ")")
+                  .call(xAxis1);
+
+              svg1.append("g")
+                  .attr("class", "y axis")
+                  .call(yAxis1)
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text("Costs (U.S. Dollars ($)");
+
+              var costs = svg1.selectAll(".costs")
+                  .data(data1)
+                .enter().append("g")
+                  .attr("class", "costs")
+                  .attr("transform", function(d1) { return "translate(" + x01(d1.costs) + ",0)"; });
+
+              costs.selectAll("rect")
+                  .data(function(d1) { return d1.race; })
+                .enter().append("rect")
+                  .attr("width", x11.rangeBand())
+                  .attr("x", function(d1) { return x11(d1.name); })
+                  .attr("y", function(d1) { return y1(d1.value); })
+                  .attr("height", function(d1) { return height1 - y1(d1.value); })
+                  .style("fill", function(d1) { return color(d1.name); });
+
+              var legend1 = svg1.selectAll(".legend")
+                  .data(raceNames.slice().reverse())
+                .enter().append("g")
+                  .attr("class", "legend")
+                  .attr("transform", function(d1, i) { return "translate(0," + i * 20 + ")"; });
+
+              legend1.append("rect")
+                  .attr("x", width1 - 18)
+                  .attr("width", 18)
+                  .attr("height", 18)
+                  .style("fill", color);
+
+              legend1.append("text")
+                  .attr("x", width1 - 24)
+                  .attr("y", 9)
+                  .attr("dy", ".35em")
+                  .style("text-anchor", "end")
+                  .text(function(d1) { return d1; });
+
+            });
+
+        </script>
+    </div>
+    <div class="container-fluid bg-1">
+        <h2 align="center">Gender</h2>
+        <div class="container">
+            <h4 id="title">Takeaways: </h4>
+            <ul class="list">
+                <li>Consistent and clear trend that the <strong id="title">female</strong> population overall surpasses
+                    the <strong id="title">male</strong> population in accounting for a larger proportion of healthcare
+                    costs. </li>
+                <li>The <strong id="title">female</strong> cohort have received a <strong id="title">higher frequency</strong>
+                    or costlier services and procedures under Medicare and Medicaid programs compared to males.</li>
+                <li>There is an approximately even proportion between females and males.</li>
+            </ul>
+            <h3 id="title" align="center">CMS Costs by Gender</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Cost Type</th>
+                            <th>Females</th>
+                            <th>Males</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in costs_sex %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 id="title" align="center">Gender Population Ratio</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th> </th>
+                            <th>Females</th>
+                            <th>Males</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in sex_ratio %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2 align="center">Bar Chart: CMS Costs vs. Sex</h2>
+        <script>
+          var margin2 = {top: 20, right: 20, bottom: 30, left: 400},
+                width2 = 1560 - margin2.left - margin2.right,
+                height2 = 510 - margin2.top - margin2.bottom;
+
+            var x02 = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .1);
+
+            var x12 = d3.scale.ordinal();
+
+            var y2 = d3.scale.linear()
+                .range([height, 0]);
+
+            var color2 = d3.scale.ordinal()
+                .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+            var xAxis2 = d3.svg.axis()
+                .scale(x0)
+                .orient("bottom");
+
+            var yAxis2 = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(d3.format(".2s"));
+
+            var svg2 = d3.select("body").append("svg")
+                .attr("width", width2 + margin2.left + margin2.right)
+                .attr("height", height2 + margin2.top + margin2.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+            d3.csv("{{ sex_file }}", function(error, data2) {
+              if (error) throw error;
+
+              var sexNames = d3.keys(data2[0]).filter(function(key) { return key !== "costs"; });
+
+              data2.forEach(function(d2) {
+                d2.race = sexNames.map(function(name) { return {name: name, value: +d2[name]}; });
+              });
+
+              x02.domain(data2.map(function(d2) { return d2.costs; }));
+              x12.domain(sexNames).rangeRoundBands([0, x02.rangeBand()]);
+              y2.domain([0, d3.max(data2, function(d2) { return d3.max(d2.race, function(d2) { return d2.value; }); })]);
+
+              svg2.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height2 + ")")
+                  .call(xAxis2);
+
+              svg2.append("g")
+                  .attr("class", "y axis")
+                  .call(yAxis2)
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text("Costs (U.S. Dollars ($)");
+
+              var costs = svg2.selectAll(".costs")
+                  .data(data2)
+                .enter().append("g")
+                  .attr("class", "costs")
+                  .attr("transform", function(d2) { return "translate(" + x01(d2.costs) + ",0)"; });
+
+              costs.selectAll("rect")
+                  .data(function(d2) { return d2.race; })
+                .enter().append("rect")
+                  .attr("width", x12.rangeBand())
+                  .attr("x", function(d2) { return x12(d2.name); })
+                  .attr("y", function(d2) { return y2(d2.value); })
+                  .attr("height", function(d2) { return height2 - y2(d2.value); })
+                  .style("fill", function(d2) { return color(d2.name); });
+
+              var legend2 = svg2.selectAll(".legend")
+                  .data(sexNames.slice().reverse())
+                .enter().append("g")
+                  .attr("class", "legend")
+                  .attr("transform", function(d2, i) { return "translate(0," + i * 20 + ")"; });
+
+              legend2.append("rect")
+                  .attr("x", width2 - 18)
+                  .attr("width", 18)
+                  .attr("height", 18)
+                  .style("fill", color);
+
+              legend2.append("text")
+                  .attr("x", width2 - 24)
+                  .attr("y", 9)
+                  .attr("dy", ".35em")
+                  .style("text-anchor", "end")
+                  .text(function(d2) { return d2; });
+
+            });
+        </script>
+
+    </div>
+
+    <div class="container-fluid bg-1">
+        <h2 id="title" align="center">Heatmap</h2>
+        <div class="container">
+            <p align="center">The heatmap portrays the correlation amongst bivariate relationships. Specifically, the plot
+                depicts the strength of correlation between the type of CMS costs (from services and procedures provided
+                under Medicare & Medicaid programs) and each demographic variables. The Pearson Coefficient was
+                calculated to measure <em id="title">linear correlation</em> between 2 variables of numeric value and is
+                measured in the interval <strong id="title">[-1, 1]</strong>.</p>
+            <h4 id="title">Takeaways: </h4>
+            <ul class="list">
+                <li>The <strong id="title">age</strong> and <strong id="title">gender</strong> variables generally have
+                    <strong id="title">stronger positive correlation</strong> with the overall and medical-related
+                    Medicare costs in comparison to the <strong id="title">race</strong> variables.</li>
+                <li>The <strong id="title">age groups <84</strong> have a stronger positive correlation with CMS costs
+                    than the <strong id="title">older group (age >84)</strong>.</li>
+                <li>The <strong id="title">race</strong> variables have a weaker positive correlation with overall and
+                    medical-related Medicare costs. In particular, the <em>low</em> Pearson coefficient value for
+                    Native Americans may be due to their low representation.</li>
+                <li>There appears to be no general correlation between drug-related Medicare costs and any of the
+                    demographic variables (Pearson Coefficient=0).</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <img src={{ heatmap_fig }} width="1200" height="700" align="center"></img>
+    </div>
+    <div id="body"></div>
+    <div class="container-fluid bg-2"><h2 id="title" align="center">Appendix</h2></div>
+    <div id="bodya"></div>
+    <div class="container text-center">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Variable Name</th>
+                        <th>Description</th>
+                        <th>Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="center">total_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for overall CMS services after deduction of deductible
+                            and coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">total_medical_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for medical (non-ASP) service after deduction of deductible
+                            and coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">total_drug_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for drug service after deduction of deductible and
+                            coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_beneficiaries_age_less_65</td>
+                        <td align="center">Number of beneficiaries under the age of 65.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_beneficiaries_age_65_to_74</td>
+                        <td align="center">Number of beneficiaries between the ages of 65 and 74.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_beneficiaries_age_75_to_84</td>
+                        <td align="center">Number of beneficiaries between the ages of 75 and 84.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_beneficiaries_age_greater_84</td>
+                        <td align="center">Number of beneficiaries over the age of 84.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_non_hispanic_white_beneficiaries</td>
+                        <td align="center">Number of non-Hispanic white beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_african_american_beneficiaries</td>
+                        <td align="center">Number of non-Hispanic black or African American beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_asian_pacific_islander_beneficiaries</td>
+                        <td align="center">Number of Asian Pacific Islander beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_hispanic_beneficiaries</td>
+                        <td align="center">Number of Hispanic beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">nnumber_of_american_indian_alaskan_native_beneficiaries</td>
+                        <td align="center">Number of American Indian or Alaska Native beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_beneficiaries_with_race_not_elsewhere_classified</td>
+                        <td align="center">Number of beneficiaries with race not elsewhere classified.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_female_beneficiaries</td>
+                        <td align="center">Number of female beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_male_beneficiaries</td>
+                        <td align="center">Number of male beneficiaries.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+        </div>
+</body>
+    {% endblock %}
+
+</html>

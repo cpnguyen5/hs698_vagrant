@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PUF Dataset</title>
+</head>
+    {% extends "base.html" %}
+    {% block content %}
+
+<body>
+    <div class="jumbotron">
+    <h2 align="center">CMS Dataset: "PUF"</h2>
+    <h4 align="center">Medicare Provider Utilization and Payment Data: Physician and Other Supplier (PUF)</h4>
+    </div>
+    <div align="center">
+    <div class="container-fluid">
+        <iframe width="2000px"
+            title="Medicare Provider Utilization and Payment Data: Physician and Other Supplier PUF CY2014" height="900px"
+            src="https://data.cms.gov/w/ee7f-sh97/vmsd-2w5m?cur=E7oA0-6-CLY&from=root" frameborder="0"scrolling="no">
+        <a href="https://data.cms.gov/Public-Use-Files/Medicare-Provider-Utilization-and-Payment-Data-Phy/ee7f-sh97"
+           title="Medicare Provider Utilization and Payment Data: Physician and Other Supplier PUF CY2014"
+           target="_blank">Medicare Provider Utilization and Payment Data: Physician and Other Supplier PUF CY2014</a>
+        </iframe>
+    <!--<p><a href="http://www.socrata.com/" target="_blank">Powered by Socrata</a></p>-->
+    </div>
+         <div class="container-fluid">
+            <a href="/data" class="btn btn-info btn-lg" role="button">Return to Dataset List</a>
+        </div>
+    </div>
+</body>
+    {% endblock %}
+</html>

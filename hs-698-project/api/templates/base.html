@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HS 698 Project: CMS</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    #body {
+      padding:50px;
+      padding-bottom:100px;
+    }
+    .footer {
+      position: static;
+      font-size: 16px;
+      bottom: 0;
+      width: 100%;
+      /* Set the fixed height of the footer here */
+      height: 250px;
+      background-color: #A2A3A0;
+      color: #000000
+    }
+    .fa-github {
+        color: black;
+    }
+    #font {
+       font-size: 16px
+    }
+</style>
+    <body>
+        <nav class="navbar navbar-inverse">
+              <div class=container-fluid">
+                  <div class="navbar-header">
+                      <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home"></span>  Home</a>
+                  </div>
+                  <ul class="nav navbar-nav">
+                      <li class="dropdown">
+                          <a id="font" href="/data" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                             aria-expanded="false">Data<span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="/data">Overview: Data</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/data/report">Report Dataset</a></li>
+                            <li><a href="/data/puf">PUF Dataset</a></li>
+                            <li><a href="/data/cancer">Cancer Dataset</a></li>
+                          </ul>
+                        </li>
+                      <li id="font"><a href="/prevalence">Prevalence</a></li>
+                      <li class="dropdown">
+                          <a id="font" href="/cost" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                             aria-expanded="false">Cost<span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="/cost">Overview: Costs</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/cost/demo">Demographics Implications</a></li>
+                            <li><a href="/cost/hcpcs">HCPCS Services & Procedures</a></li>
+                          </ul>
+                        </li>
+                      <li class="dropdown">
+                          <a id="font" href="/cancer" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                             aria-expanded="false">Cancer<span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="/cancer">Overview: Cancer</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/cancer/risk">Risk Factors</a></li>
+                          </ul>
+                        </li>
+                  </ul>
+              </div>
+            </nav>
+
+        {% block content %}{% endblock %}
+        <div id="body"></div>
+
+        <div class="footer">
+            <div class="container text-center">
+                <h5><strong>Contact Information</strong></h5>
+                    <p align="center" style="font-size: 16px">
+                        University of San Francisco <br>
+                        School of Nursing and Health Professions Health Informatics<br>
+                        HS 698 <br>
+                    </p>
+                    <p style="font-size: 16px"><span class="glyphicon glyphicon-envelope"></span>
+                        cpnguyen5@dons.usfca.edu</p>
+
+                    <a href="https://github.com/cpnguyen5/hs-698-project">
+                        <i class="fa fa-github fa-5x"></i>
+                        <!--<img src={{ gh_img }}> -->
+                    </a>
+                <!--{% block footer %}{% endblock %}-->
+            </div>
+        </div>
+    </body>
+</html>
+

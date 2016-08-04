@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Data</title>
+    </head>
+    {% extends "base.html" %}
+    {% block content %}
+<style>
+    p {
+        font-size: 16px
+    }
+    li {
+        font-size: 16px
+    }
+</style>
+<body>
+    <div class="jumbotron">
+      <h1 align="center">Datasets</h1>
+      <p class="text-center">Links below provide detailed view of the respective dataset.</p>
+      <div align="center">
+        <div class="container-fluid">
+            <a href="/data/report" class="btn btn-info btn-lg" role="button">Report Dataset</a>
+            <a href="/data/puf" class="btn btn-info btn-lg" role="button">PUF Dataset</a>
+            <a href="/data/cancer" class="btn btn-info btn-lg" role="button">Cancer Dataset</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        <div align="center">
+        <h2><strong>CMS Medicare Provider Utilization and Payment Data</strong></h2>
+            <img src={{ cms_img }} class="img-rounded"></img>
+        </div>
+
+        <p class="text-left">
+          The Centers for Medicare & Medicaid Services (CMS) distributes this public dataset in order to assure transparency,
+          affordability, and accountability of the American healthcare system. The datasets provides information on services
+          and procedures provided to Medicare beneficiaries by physicians and other healthcare professionals. This encompasses
+          information on utilization, payment (allowed amount and Medicare payment), as well as submitted charges categorized
+          by National Provider Identifier (NPI), Healthcare Common Procedure Coding Systems (HCPCS) code, and place of service.
+          The Provider Utilization and Payment data is based on information from administrative claims data for Medicare
+          beneficiaries enrolled in the fee-for-service program.
+        </p>
+        <p>
+            There are two types of summary tables or datasets within:
+        <ul class="list">
+            <li>Physician and other Supplier (PUF) Detailed Data File - <strong>"PUF"</strong></li>
+            <li>Medicare State/National HCPCS Aggregate Tables - <strong>"Report"</strong></li>
+        </ul>
+        </p>
+        <p><strong>Limitations: </strong></p>
+        <ul class="list">
+            <li>Data may not be representative of a physician's entire practice (only includes information on Medicare
+              fee-for-service beneficiaries).</li>
+            <li>Data only includes information for Medicare beneficiaries with Part B FFS coverage and not other Medicare
+              programs.</li>
+            <li>Data is not intended to indicate the quality of care and are not risk-adjusted to account for differences
+              in underlying severity of disease of patient populations.</li>
+            <li>The data does not include data for services that were performed on <10 beneficiaries. Thus, may be
+                underestimating the true Part B FFS totals.</li>
+            <li>Some providers may bill under both an individual and organizational NPI. It is difficult to determine a
+              provider's actual total.</li>
+        </ul>
+        <h3><strong>"Report"</strong>
+            <small>Medicare Physician and Other Supplier National Provider Identifier (NPI) Aggregate Report</small>
+        </h3>
+        <p>
+            The dataset contains information on utilization, payment, and submitted charges organized by NPI. HCPCS drug
+            indicator is also included to identify whether the HCPCS product or service is a drug per definition of the
+            Medicare Part B Drug ASP list. Sub-totals for medical type and drug services as well as beneficiary
+            demographic and health characteristics are provided within the dataset (e.g. race, sex, chronic conditions).
+        </p>
+
+        <h3><strong>"PUF"</strong>
+            <small>Medicare Provider Utilization and Payment Data: Physician and Other Supplier (PUF)</small>
+        </h3>
+        <p>
+            The spending and utilization data in the PUF dataset are aggregated by NPI, HCPCS code, and place of service
+            (facility or non-facility). There may be multiple records for a given NPI based on the number of distinct HCPCS
+            codes that were billed and where services were provided.
+        </p>
+
+        <div align="center">
+        <h2><strong>Supplementary Datasets</strong></h2>
+          <img src={{ bchc_img }}></img>
+        </div>
+        <h3><strong>"Cancer"</strong>
+            <small>Big Cities Health Coalition Inventory Data: Cancer Incidence</small>
+        </h3>
+        <p>
+            The "Cancer" dataset is a filtered view derived from the Big Cities Health Inventory Data, which reports
+            epidemiologic data on the leading causes of morbidity and mortality for large cities. The filtered view
+            specifically focuses on one health indicator, in this case cancer, and its impact in the community.
+        </p>
+    </div>
+
+</body>
+    {% endblock %}
+</html>

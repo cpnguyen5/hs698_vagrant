@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HS 698 CMS Project</title>
+    {% extends "base.html" %}
+    {% block content %}
+</head>
+<style>
+    #font {
+        font-size: 18px
+    }
+</style>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <div align="center">
+            <h1>HS 698 Project</h1>
+            <h3>Centers for Medicare & Medicaid Services (CMS) Provider Utilization & Payment Plan</h3>
+            <img src={{ img_file }} class="img-rounded"></img>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2>Purpose</h2>
+    <p style="font-size: 18px">Investigate the utilization of services & procedures and the relative healthcare costs amongst providers
+        participating in Medicare and Medicaid programs in order to explore the current quality of care being provided
+        to beneficiaries of the CMS (Centers for Medicare & Medicaid Services) fee-for-service programs.</>
+    <h2>Objectives</h2>
+    <div id="font">
+    <ol>
+        <li>Visualize the prevalence of disease/chronic conditions amongst beneficiaries receiving care under Medicare &
+            Medicaid program.</li>
+        <li>Determine the costs of services and procedures provided to CMS beneficiaries by clinicians by geographic
+            location, facility type, and "provider utilization" (HCPCS codes).</li>
+        <li>Investigate the relationship between healthcare costs under CMS and demographics (e.g. age, race, gender).
+        </li>
+        <li>Conduct a case study on beneficiaries identified with cancer (all types) in order to determine the impact
+            of cancer on the CMS programs.</li>
+    </ol>
+    </div>
+</div>
+
+
+</body>
+{% endblock %}
+
+</html>

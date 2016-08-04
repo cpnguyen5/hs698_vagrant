@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cost: Services</title>
+</head>
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .bg-1 {
+        background-color: #A2A3A0;
+        color: #ffffff;
+    }
+    .bg-2 {
+        background-color: #A2A3A0;
+        color: #ffffff;
+    }
+    li {
+      font-size: 16px
+    }
+    th {
+      text-align: center;
+      font-size: 16px
+    }
+    td {
+      text-align: center;
+      font-size: 14px
+    }
+    #title {
+        color: #000000
+    }
+    #body {
+      padding:20px;
+      padding-bottom:10px;
+    }
+    #bodya {
+      padding-top:10px;
+    }
+
+</style>
+<body>
+    <div class="jumbotron">
+        <h1 align="center">CMS Costs vs. Provider Utilization</h1>
+            <h3 align="center">(HCPCS Services & Procedures)</h3>
+        <div class="container text-center">
+
+        </div>
+        <div id="body"></div>
+        <div align="center">
+            <a href="/cost" class="btn btn-info btn-lg" role="button">Return to State Cost Overview</a>
+        </div>
+    </div>
+    <div class="container">
+        <h2 align="center">Provider Utilization Overview</h2>
+        <h3>Histogram: Unique HCPCS Services & Procedures</h3>
+        <ul class="list">
+            <li>There is a positive, right-skewed distribution for the number of unique HCPCS services and procedures
+                provided per provider under the Medicaid and Medicare programs, suggesting that the <strong>mean</strong>
+                is larger than the <strong>median</strong> and <strong>mode</strong> (most frequent).</li>
+            <li>The <strong id="title">average/mean number of unique services</strong> under CMS is
+                <strong>{{ avg }}</strong>. The <strong>median</strong> and <strong>mode</strong> values are
+                <strong>{{ median }}</strong> and <strong>{{ mode }}</strong>, respectively. This indicates
+                that <strong id="title">{{ mode }} unique services was more frequently ordered</strong> by the providers
+                under CMS.</li>
+        </ul>
+        <h3>Pie Chart: Number of Services - Provider Utilization</h3>
+        <ul class="list">
+            <li>Majority of the services and procedures were utilized by clinicians for <strong>medical-related</strong>
+                services, which had an overall sum of {{ total_serv[1] }} across the nation. <strong>Drug-related</strong>
+                utilization accounted for {{ total_serv[2] }} services.</li>
+            <li>Overall, the <strong id="title">total number of services and procedures</strong> utilized under CMS was
+                <strong id="title">{{ total_serv[0] }}</strong>.</li>
+        </ul>
+
+    </div>
+    <div class="container-fluid">
+        <div align="center">
+        <img src="{{ unique_fig }}" width="600" height="350">
+        <img src="{{ pie_fig }}" width="500" height="400">
+        </div>
+    </div>
+    <div id="body"></div>
+
+    <div class="container-fluid bg-1">
+    <div class="container">
+        <h2 align="center" id="title">Correlation: Utilization vs. Costs</h2>
+            <p style="font-size: 18px" class="text-center">The heatmap portrays the correlation amongst bivariate
+                relationships. Specifically, the plot depicts the strength of correlation between the type of CMS costs
+                and number of services under the Medicaid & Medicare programs. The Pearson Coefficient was calculated to
+                measure linear correlation between 2 variables of numeric value and is measured in the interval [-1, 1].
+            </p>
+        <h4 id="title">Takeaways: </h4>
+        <ul class="list">
+            <li>The number of total services and procedures under CMS has a relatively <strong id="title">weak positive
+                correlation</strong> with the total overall CMS costs and medical-related costs.</li>
+            <li>On the other hand, there is a <strong id="title"> relatively strong negative correlation</strong>
+                between the total number of services and the total drug-related CMS costs.</li>
+            <li>The number of unique HCPCS services and procedures appears to have a <strong id="title"> negatively linear
+                correlation</strong> with all types of CMS costs (all-inclusive, medical-related, and drug-related.</li>
+        </ul>
+        <div align="center">
+            <h3 align="center" id="title">Heatmap</h3>
+            <img src="{{ scorr_heatmap }}" width="900" height="550">
+        </div>
+    </div>
+    </div>
+    <div id="body"></div>
+
+    <div class="container">
+        <h2 align="center">Rankings</h2>
+             <h3 align="center">Top HCPCS Services & Procedures Utilized</h3>
+                <p style="font-size: 15px" class="text-center">Most frequently ordered service/procedure by clinicians across
+                    the nation under the Medicaid & Medicare program.</p>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>HCPCS Code</th>
+                            <th>HCPCS Description</th>
+                            <th>Count</th>
+                            <th>Average Standardized Cost ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in freq_serv %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                            <td align="center">{{row[3]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 align="center">Most Expensive HCPCS Services & Procedures</h3>
+                    <p style="font-size: 15px" class="text-center">The frequency/count for the most expensive HCPCS
+                        services/procedures on average.</p>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>HCPCS Code</th>
+                            <th>HCPCS Description</th>
+                            <th>Count</th>
+                            <th>Average Standardized Cost ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in exp_serv %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                            <td align="center">{{row[2]}}</td>
+                            <td align="center">{{row[3]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+    <div id="body"></div>
+    <div class="container-fluid bg-2"><h2 id="title" align="center">Appendix</h2></div>
+    <div id="bodya"></div>
+    <div class="container text-center">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Variable Name</th>
+                        <th>Description</th>
+                        <th>Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="center">HCPCS_code</td>
+                        <td align="center">HCPCS code used to identify specific medical service provided by the provider.
+                            </td>
+                        <td align="center">categorical</td>
+                    </tr>
+                    <tr>
+                        <td align="center">HCPCS_description</td>
+                        <td align="center">Description of HCPCS code.</td>
+                        <td align="center">text</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_HCPCS</td>
+                        <td align="center">Total number of unique HCPCS codes for each provider.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_services</td>
+                        <td align="center">Number of total services.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_medical_services</td>
+                        <td align="center">Number of HCPCS medical-related services.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">number_of_drug_services</td>
+                        <td align="center">Number of HCPCS drug-related services.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">total_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for overall CMS services after deduction of deductible
+                            and coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">total_medical_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for medical (non-ASP) service after deduction of deductible
+                            and coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">total_drug_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for drug service after deduction of deductible and
+                            coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+        </div>
+</body>
+    {% endblock %}
+</html>

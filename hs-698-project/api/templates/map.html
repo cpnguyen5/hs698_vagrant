@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+    <title>Case Study: Cancer</title>
+</head>
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .bg-1 {
+        background-color: #1abc9c; /* Green */
+        color: #ffffff;
+    }
+    .bg-2 {
+        background-color: #A2A3A0;
+        color: #ffffff;
+    }
+    #title {
+        color: #555555
+    }
+    li {
+        font-size: 18px
+    }
+    p {
+        font-size: 18px
+    }
+    th {
+      text-align: center;
+      font-size: 16px
+    }
+    #sub {
+        font-size: 20px
+    }
+    #body {
+      padding:20px;
+      padding-bottom:20px;
+    }
+    #bodya {
+      padding-top:10px;
+    }
+
+    <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      position: relative;
+      width: 960px;
+    }
+
+    .axis text {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .bar {
+      fill: steelblue;
+      fill-opacity: .9;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+    label {
+      position: static;
+      bottom: 900px;
+      right: 200px;
+    }
+</style>
+<body>
+    <div class="jumbotron">
+        <h1 align="center">Case Study: Cancer Prevalence</h1>
+        <h2 align="center">Interactive United States Map</h2>
+        <p class="text-center">Please hover over interactive United States map to view cancer prevalence for each
+            respective state.</p>
+    </div>
+    <p id="sub" class="text-center"> The overall average prevalence of cancer amongst Medicare & Medicaid beneficiaries
+        in the United States is <strong>{{ us_avg }}%</strong>.</p>
+    <div>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://d3js.org/topojson.v1.min.js"></script>
+        <!--<script src="http://datamaps.github.io/scripts/datamaps.usa.min.js?v=1"></script>-->
+        <script src= {{ cancer_js }}></script>
+        <script src= {{ topo_js }}></script>
+        <script src= {{ js_file }}></script>
+      <div id="container" style="position: relative; width: 1500px; height: 750px; left: 155px; top: 0px; bottom: 50px"></div>
+
+         <script>
+           var map = new Datamap({
+                element: document.getElementById('container'),
+                scope: 'usa',
+                geographyConfig: {
+                    highlightBorderColor: '#eaeaea',
+                    highlightBorderWidth: 10,
+                    popupTemplate: function(geography, data) {
+                        return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong> <br /> Average Cancer Prevalence:' + data.prevalence + '%' + ' </div>'
+                        }
+
+                    },
+              fills: {
+              <!--'HIGH': '#00819c',-->
+              <!--'LOW': '#e1b120',-->
+              defaultFill: '#69a264'
+            },
+            data:{
+              "AZ": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['AZ'] }}
+              },
+              "CO": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['CO'] }}
+              },
+              "DE": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['DE'] }}
+              },
+              "FL": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['FL'] }}
+              },
+              "GA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['GA'] }}
+              },
+              "HI": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['HI'] }}
+              },
+              "ID": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['ID'] }}
+              },
+              "IL": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['IL'] }}
+              },
+              "IN": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['IN'] }}
+              },
+              "IA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['IA'] }}
+              },
+              "KS": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['KS'] }}
+              },
+              "KY": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['KY'] }}
+              },
+              "LA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['LA'] }}
+              },
+              "MD": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MD'] }}
+              },
+              "ME": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['ME'] }}
+              },
+              "MA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MA'] }}
+              },
+              "MN": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MN'] }}
+              },
+              "MI": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MI'] }}
+              },
+              "MS": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MS'] }}
+              },
+              "MO": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MO'] }}
+              },
+              "MT": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['MT'] }}
+              },
+              "NC": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NC'] }}
+              },
+              "NE": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NE'] }}
+              },
+              "NV": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NV'] }}
+              },
+              "NH": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NH'] }}
+              },
+              "NJ": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NJ'] }}
+              },
+              "NY": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NY'] }}
+              },
+              "ND": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['ND'] }}
+              },
+              "NM": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['NM'] }}
+              },
+              "OH": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['OH'] }}
+              },
+              "OK": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['OK'] }}
+              },
+              "OR": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['OR'] }}
+              },
+              "PA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['PA'] }}
+              },
+              "RI": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['RI'] }}
+              },
+              "SC": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['SC'] }}
+              },
+              "SD": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['SD'] }}
+              },
+              "TN": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['TN'] }}
+              },
+              "TX": {
+                  "fillKey": "HIGH",
+                  "prevalence": {{ d_state['TX'] }}
+              },
+              "UT": {
+                  <!--"fillKey": "LOW",-->
+                  "prevalence": {{ d_state['UT'] }}
+              },
+              "WI": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['WI'] }}
+              },
+              "VA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['VA'] }}
+              },
+              "VT": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['VT'] }}
+              },
+              "WA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['WA'] }}
+              },
+              "WV": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['WV'] }}
+              },
+              "WY": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['WY'] }}
+              },
+              "CA": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['CA'] }}
+              },
+              "CT": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['CT'] }}
+              },
+              "AK": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['AK'] }}
+              },
+              "AR": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['AR'] }}
+              },
+              "AL": {
+                  <!--"fillKey": "HIGH",-->
+                  "prevalence": {{ d_state['AL'] }}
+              }
+            }
+            });
+         </script>
+
+    </div>
+    <div class="container">
+        <h2 align="center">Distribution of Cancer Prevalence Amongst CMS Beneficiaries</h2>
+        <ul class="list">
+                <li>The distribution of cancer amongst beneficiaries under Medicare & Medicaid program does not have an
+                    even distribution. The plot below indicates that there is a <strong>positive or right-skewed
+                        distribution</strong>,
+                    indicating that the population <strong>mean/average</strong> is <em>greater</em> than the
+                    <strong>median</strong> (middle value) and <strong>mode</strong> (most frequent prevalence value).</li>
+                <li> Outliers are detected to be any prevalence value above <strong>{{ outlier['upper'] }}%</strong> (upper bound)
+                    and any values below <strong>{{ outlier['lower'] }}%</strong> (lower bound).</li>
+            </ul>
+        <div align="center">
+            <img src={{ chist_fig }} width="1000" height="500" align="center"></img>
+        </div>
+    </div>
+    <div id="body"></div>
+    <div class="container-fluid bg-1">
+        <div class="container">
+        <h1 align="center">Information</h1>
+            <h3 id=title align="left">Background</h3>
+                <ul class="list">
+                    <li>In 2012, more than 1.6 million new cases of cancer were diagnosed. <strong id="title">50%</strong>
+                        of those cases (880,000) were <strong id="title">over the age of 65</strong>. The number of
+                        elderly CMS beneficiaries with cancer are projected to <strong id="title">grow by 40% over the
+                            next 10 years</strong>. (American Cancer Society)</li>
+                    <li>Elderly people are <strong id="title">10 times more likely</strong> to be diagnosed with cancer,
+                        regardless of race or ethnicity.</li>
+                    <li>Medicare beneficiaries with cancer have <strong id="title">higher annual out-of-pocket
+                        costs</strong> (<strong id="title">$1,500</strong>) than beneficiaries without the disease.</li>
+                    <li>In 2011, Medicare payments for cancer-related treatment <strong id="title">totaled $34.4 billion
+                        </strong>, <strong>10%</strong> of Medicare fee-for-service dollars</li>
+                    <li>Medicare is of high importance in providing a lifeline of affordable and quality health care
+                        coverage. There is an important relationship between Medicare and cancer disease -- financial
+                        impact on CMS programs and beneficiaries (out-of-pocket expenses).</li>
+                </ul>
+
+            <h3 id=title align="left">CMS Part B services</h3>
+                <ul class="list">
+                    <li>Part B of CMS (Supplementary Medical Insurance Program) covers physician services, outpatient
+                        services, durable medical equipment, clinical laboratory and physicial therapy services.</li>
+                    <li>Covers drugs that are administered to a patient by a health care professional in an office or
+                        clinic setting, including certain medications used to treat cancer or side effects of chemotherapy.</li>
+                    <li>Covers cancer screenings to detect early cancer or precancerous growths, when treatment is most
+                        effective.</li>
+                </ul>
+            <h3 id="title" align="left">Risk Factors</h3>
+            <p>Research has demonstrated that certain risk factors may increase an individual's chances of developing
+                cancer. Such factors may include <strong id="title">demographic attributes (e.g. age, ethnicity), family
+                history, and exposure to chemicals</strong>. (National CancerInstitute)</p>
+            <p>Risks were identified and determined by epidemiology studies, in which large groups of patients diagnosed
+                with cancer were compared to groups that did not develop the disease.</p>
+
+            <div align="center" id="title"><p><strong>View the following page for an in-depth exploration of potential
+                risk factors.</strong></p>
+                <a href="/cancer/risk" class="btn btn-info btn-lg" role="button">Risk Factors</a>
+            </div>
+        </div>
+        <div id="body"></div>
+    </div>
+    <div id="body"></div>
+    <div class="container text-center">
+        <h2>Average CMS Costs from Cancer Beneficiaries per State</h2>
+        <p>The state with the <strong><em>highest</em></strong> costs for services & procedures provided under CMS is
+            <strong>{{ max_state[0] }} </strong>with an average cost of <strong>${{ max_state[1] }}</strong>.</p>
+        <p>The state with the <strong><em>lowest</em></strong> costs for services & procedures provided under CMS is
+            <strong>{{ min_state[0] }}</strong>with an average cost of <strong>${{ min_state[1] }}</strong>.</p>
+    </div>
+    <div class="container text-right">
+        <label><input type="checkbox"> Sort values</label>
+        <script src={{ cancer_js }}></script>
+        <script>
+
+            var margin = {top: 20, right: 20, bottom: 30, left: 300},
+                width = 1460 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+
+            var formatSuffix = d3.format("s");
+
+            var x = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .1, 1);
+
+            var y = d3.scale.linear()
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(formatSuffix);
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            d3.tsv("{{ cancer_costs_file }}", function(error, data) {
+
+              data.forEach(function(d) {
+                d.costs = +d.costs;
+              });
+
+              x.domain(data.map(function(d) { return d.state; }));
+              y.domain([0, d3.max(data, function(d) { return d.costs; })]);
+
+              svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(xAxis);
+
+              svg.append("g")
+                  .attr("class", "y axis")
+                  .call(yAxis)
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text("Average Costs ($)");
+
+              svg.selectAll(".bar")
+                  .data(data)
+                .enter().append("rect")
+                  .attr("class", "bar")
+                  .attr("x", function(d) { return x(d.state); })
+                  .attr("width", x.rangeBand())
+                  .attr("y", function(d) { return y(d.costs); })
+                  .attr("height", function(d) { return height - y(d.costs); });
+
+              d3.select("input").on("change", change);
+
+              var sortTimeout = setTimeout(function() {
+                d3.select("input").property("checked", true).each(change);
+              }, 2000);
+
+              function change() {
+                clearTimeout(sortTimeout);
+
+                // Copy-on-write since tweens are evaluated after a delay.
+                var x0 = x.domain(data.sort(this.checked
+                    ? function(a, b) { return b.costs - a.costs; }
+                    : function(a, b) { return d3.ascending(a.state, b.state); })
+                    .map(function(d) { return d.state; }))
+                    .copy();
+
+                svg.selectAll(".bar")
+                    .sort(function(a, b) { return x0(a.state) - x0(b.state); });
+
+                var transition = svg.transition().duration(750),
+                    delay = function(d, i) { return i * 50; };
+
+                transition.selectAll(".bar")
+                    .delay(delay)
+                    .attr("x", function(d) { return x0(d.state); });
+
+                transition.select(".x.axis")
+                    .call(xAxis)
+                  .selectAll("g")
+                    .delay(delay);
+              }
+            });
+
+     </script>
+
+    </div>
+    <div class="container text-right">
+        <h3 align="center">States with Lowest CMS Costs</h3>
+                <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Costs ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in low_cost %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 align="center">States with Highest CMS Costs</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Costs ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in high_cost %}
+                        <tr>
+                            <td align="center">{{row[0]}}</td>
+                            <td align="center">{{row[1]}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    <div id="body"></div>
+    <div class="container-fluid bg-2"><h2 align="center">Appendix</h2></div>
+    <div id="bodya"></div>
+    <div class="container text-center">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Variable Name</th>
+                        <th>Description</th>
+                        <th>Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td align="center">percent_of_beneficiaries_identified_with_cancer</td>
+                        <td align="center">Percent of beneficiaries meeting the CCW chronic condition algorithms for
+                            cancer. Includes breast, colorectal, lung, and prostate cancer.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                    <tr>
+                        <td align="center">provider_state_code</td>
+                        <td align="center">State where provider is located.</td>
+                        <td align="center">categorical</td>
+                    </tr>
+                    <tr>
+                        <td align="center">total_medicare_standardized_payment_amount</td>
+                        <td align="center">Total amount paid for overall CMS services after deduction of deductible
+                            and coinsurance. Standardized to remove geographic differences in payment rates and makes
+                            payments comparable.</td>
+                        <td align="center">continuous/numeric</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+        </div>
+
+  </body>
+    {% endblock %}
+</html>
+

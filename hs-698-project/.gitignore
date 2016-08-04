@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+drafts/
+api/dataset/cms.db
+api/dataset/Medicare_Physician_and_Other_Supplier_National_Provider_Identifier__NPI__Aggregate_Report__Calendar_Year_2014.csv
+api/dataset/Medicare_Provider_Utilization_and_Payment_Data__Physician_and_Other_Supplier_PUF_CY2014.csv

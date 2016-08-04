@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancer Dataset</title>
+</head>
+    {% extends "base.html" %}
+    {% block content %}
+<body>
+    <div class="jumbotron">
+    <h2 align="center">Dataset: "Cancer"</h2>
+    <h4 align="center">Big Cities Health Coalition Inventory Data: Cancer Incidence</h4>
+    </div>
+    <div align="center">
+    <div class="container-fluid">
+        <iframe width="950px" title="cancer_state" height="808px" src="https://bchi.bigcitieshealth.org/w/t7hx-pgse/?cur=-7X9oiWEBoE&from=root"
+            frameborder="0"scrolling="no">
+        <a href="https://bchi.bigcitieshealth.org/Government/cancer_state/t7hx-pgse"
+           title="cancer_state" target="_blank">cancer_state</a>
+        </iframe>
+        <!--<p><a href="http://www.socrata.com/" target="_blank">Powered by Socrata</a></p>-->
+    </div>
+         <div class="container-fluid">
+            <a href="/data" class="btn btn-info btn-lg" role="button">Return to Dataset List</a>
+        </div>
+    </div>
+</body>
+    {% endblock %}
+</html>
