@@ -27,11 +27,12 @@ def download(url, path):
 
 
 def readCSV():
-    f='Medicare_Physician_and_Other_Supplier_National_Provider_Identifier__NPI__Aggregate_Report__Calendar_Year_2014.csv'
+    # f='Medicare_Physician_and_Other_Supplier_National_Provider_Identifier__NPI__Aggregate_Report__Calendar_Year_2014.csv'
+    f = 'CMS_Aggregate_Report.csv'
     f_path = os.path.join(get_path(), f)
     if not os.path.isfile(f_path):
         print "Downloading Report CSV file -- download may take awhile..."
-        download('https://data.cms.gov/api/views/4a3h-46r6/rows.csv?accessType=DOWNLOAD', f_path)
+        download('https://drive.google.com/open?id=0B8umucjnm9I_X0ZEZVBzYkllNWc', f_path)
         print "Report CSV download complete"
     columns = ["npi", "provider_last_name", "provider_first_name", "provider_middle_initial", "provider_credentials",
                "provider_gender", "provider_entity_type", "provider_street_address_1", "provider_street_address_2",
@@ -112,36 +113,33 @@ def readCSV():
              ('percent_of_beneficiaries_identified_with_schizophrenia_other_psychotic_disorders', np.float64),
              ('percent_of_beneficiaries_identified_with_stroke', np.float64),
              ('average_HCC_risk_score_of_beneficiaries', np.float64)]
-    rep_reader = pd.read_csv(f_path, sep=',', iterator=True, chunksize=200000, names=columns, header=0, dtype=types,
-                     na_values='')
+    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=['']) # DataFrame loaded from CSV
 
-    #filter for only US states -- Convert to Numpy array
-    state = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
-             'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
-             'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']
-
-    terr = ['PR', 'GU', 'VI', 'AS', 'District of Columbia', 'MP', 'AA', 'AE', 'AP'] #USA territories
-    usa = state+terr
-
-    report_lst = []
-    for chunk in rep_reader:
-        data = chunk.as_matrix()
-        US_data = np.array([row for row in data if row[12]=='US'])
-        for row in US_data:
-            if row[11] not in usa and len(str(row[10])) >=5:
-                location=pz.get(int(str(row[10])[:5]),'US')
-                if location != False:
-                    row[10]=location['postal_code'] #correct ZIP code
-                    row[11]=location['state_short'] #correct state code
-        state_data= np.array([row for row in US_data if row[11] in state])
-
-        #Convert to recarray -- transfer hetergeneous column dtypes to DataFrame
-        state_recarray = np.core.records.fromarrays(np.transpose(state_data), dtype=types, names=columns)
-        #Convert to Pandas DataFrame
-        state_df = pd.DataFrame.from_records(state_recarray, columns=columns)
-        state_df = state_df.replace(to_replace='', value=np.nan)
-        report_lst += [state_df]
-    return report_lst
+    # #filter for only US states -- Convert to Numpy array
+    # state = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
+    #          'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
+    #          'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']
+    #
+    # terr = ['PR', 'GU', 'VI', 'AS', 'District of Columbia', 'MP', 'AA', 'AE', 'AP'] #USA territories
+    # usa = state+terr
+    #
+    # data = rep_reader.as_matrix()
+    # US_data = np.array([row for row in data if row[12]=='US'])
+    # for row in US_data:
+    #     if row[11] not in usa and len(str(row[10])) >=5:
+    #         location=pz.get(int(str(row[10])[:5]),'US')
+    #         if location != False:
+    #             row[10]=location['postal_code'] #correct ZIP code
+    #             row[11]=location['state_short'] #correct state code
+    # state_data= np.array([row for row in US_data if row[11] in state])
+    #
+    # #Convert to recarray -- transfer hetergeneous column dtypes to DataFrame
+    # state_recarray = np.core.records.fromarrays(np.transpose(state_data), dtype=types, names=columns)
+    # #Convert to Pandas DataFrame
+    # state_df = pd.DataFrame.from_records(state_recarray, columns=columns)
+    # state_df = state_df.replace(to_replace='', value=np.nan)
+    # # state_df.to_csv(path_or_buf=os.path.join(get_path(), 'CMS_Aggregate_Report.csv'), index=False)
+    return rep_reader
 
 
 def readPUF():
