@@ -113,7 +113,7 @@ def readCSV():
              ('percent_of_beneficiaries_identified_with_schizophrenia_other_psychotic_disorders', np.float64),
              ('percent_of_beneficiaries_identified_with_stroke', np.float64),
              ('average_HCC_risk_score_of_beneficiaries', np.float64)]
-    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=[''], chunksize=200000, iterator=True)
+    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=[''], chunksize=100000, iterator=True, low_memory=False)
     report_lst = []
     for chunk in rep_reader:
         report_lst += [chunk]
