@@ -1,6 +1,6 @@
-from fabric.api import run, sudo, env
+from fabric.api import run, sudo, env, cd
 import subprocess
-
+import fabtools
 
 ### LINUX PACKAGES TO INSTALL ###
 
@@ -21,7 +21,8 @@ INSTALL_PACKAGES = [
    'pkg-config',
    'libpng-dev',
    'libfreetype6-dev',
-   'libpq-dev python-dev'
+   'libpq-dev python-dev',
+   'postgresql'
 ]
 
 ### ENVIRONMENTS ###
@@ -43,6 +44,14 @@ def vagrant():
     env.virtualenv = {'dir': '/server', 'name': 'venv'}
 
 
+def aws():
+    """Defines the AWS server's environment variables."""
+    env.hosts = 'ec2-54-186-163-254.us-west-2.compute.amazonaws.com'
+    env.user = 'ubuntu'
+    env.key_filename = '/home/cpnguyen/usf/hs698_key/hs698project2.pem'
+    env.virtualenv = {'dir': '/server', 'name': 'venv'}
+
+
 def bootstrap():
     """Set up and configure Vagrant to be able to serve the web app.
     Runs commands on the command line to configure the Ubuntu server.
@@ -50,7 +59,7 @@ def bootstrap():
     sub_install_packages()
     sub_install_virtualenv()
     sub_create_virtualenv()
-    sub_install_python_requirements()
+    # sub_install_python_requirements()
 
 
 def sub_install_packages():
@@ -93,7 +102,8 @@ def sub_install_python_requirements():
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
     # Install Python requirements
-    install = 'pip install -r /vagrant/hs-698-project/requirements.txt'
+    # install = 'pip install -r /vagrant/hs-698-project/requirements.txt'
+    install = 'pip install -r /home/ubuntu/hs698_vagrant/hs-698-project/requirements.txt'
     # Join and execute the commands
     run(activate + '; ' + install)
 
@@ -104,5 +114,30 @@ def dev_server():
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
     # Run the file run_api.py to start the Flask app
-    dev_server = 'python /vagrant/hs-698-project/run_api.py'
+    # dev_server = 'python /vagrant/hs-698-project/run_api.py'
+    dev_server = 'python /home/ubuntu/hs698_vagrant/hs-698-project/run_api.py'
     run(activate + '; ' + dev_server)
+
+
+def postgres():
+    """Initiate postgresql database instance."""
+    # try:
+    #     conn = psycopg2.connect("dbname='cms_post' user='postgres' host='localhost' password='abcd1234'")
+    # except:
+    #     print "Fail"
+
+    # Activate the virtualenv
+    # activate = 'source {0}/{1}/bin/activate'.format(
+    #     env.virtualenv['dir'], env.virtualenv['name'])
+    # Create db user if not yet exist
+    print fabtools.postgres.user_exists('postgres1')
+    if not fabtools.postgres.user_exists('postgres1'):
+        fabtools.postgres.create_user('postgres1', password='abcd1234')
+
+    # Create db if not yet exist
+    print fabtools.postgres.database_exists('cms_post1')
+    if not fabtools.postgres.database_exists('cms_post1'):
+        fabtools.postgres.create_database('cms_post1', owner='postgres1')
+    create_path = '/home/ubuntu/hs698_vagrant/hs-698-project/db_create.py'
+    run('python ' + create_path)
+

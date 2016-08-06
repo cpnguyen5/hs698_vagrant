@@ -16,3 +16,4 @@ class DevelopmentConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG=False
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres1:abcd1234@localhost/cms_post1"

@@ -1,5 +1,5 @@
 from api import db, app
-from api.models import Report, Puf, Cancer
+# from api.models import Report, Puf, Cancer
 import project
 
 engine = db.engine
@@ -8,7 +8,7 @@ engine = db.engine
 db.engine.dialect.identifier_preparer.initial_quote = ''
 db.engine.dialect.identifier_preparer.final_quote = ''
 
-#Create database and tables
+#Create database and tablesfab vagrant bo
 db.create_all()
 print "Table(s) schema created, inserting data..."
 
@@ -18,14 +18,16 @@ df_report = project.readCSV()
 for elem in df_report:
     elem.to_sql('report', engine, if_exists='append', index=False)
     db.session.commit()
-## Insert PUF CSV -- Puf Table
-df_puf = project.readPUF()
-for elem in df_puf[:5]:
-    elem.to_sql('puf', engine, if_exists='append', index=False)
-    db.session.commit()
+# ## Insert PUF CSV -- Puf Table
+# df_puf = project.readPUF()
+# for elem in df_puf:
+#     elem.to_sql('puf', engine, if_exists='append', index=False)
+#     db.session.commit()
 ## Insert BCHC CSV -- Cancer Table
 df_can = project.readBCH()
 df_can.to_sql('cancer', engine, if_exists='append', index=False)
+
+
 
 #Commit changes
 db.session.commit()
