@@ -14,10 +14,10 @@ print "Table(s) schema created, inserting data..."
 
 # Insert Data -- Bulk insert of DataFrame
 ## Insert Report CSV -- Report Table
-df_report = project.readCSV()
-for elem in df_report:
-    elem.to_sql('report', engine, if_exists='append', index=False)
-    db.session.commit()
+# df_report = project.readCSV()
+# for elem in df_report:
+#     elem.to_sql('report', engine, if_exists='append', index=False)
+#     db.session.commit()
 # ## Insert PUF CSV -- Puf Table
 # df_puf = project.readPUF()
 # for elem in df_puf:
