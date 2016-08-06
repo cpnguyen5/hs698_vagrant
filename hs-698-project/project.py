@@ -32,7 +32,7 @@ def readCSV():
     f_path = os.path.join(get_path(), f)
     if not os.path.isfile(f_path):
         print "Downloading Report CSV file -- download may take awhile..."
-        download('https://drive.google.com/open?id=0B8umucjnm9I_X0ZEZVBzYkllNWc', f_path)
+        download('https://opendata.socrata.com/api/views/cx4a-ep76/rows.csv?accessType=DOWNLOAD', f_path)
         print "Report CSV download complete"
     columns = ["npi", "provider_last_name", "provider_first_name", "provider_middle_initial", "provider_credentials",
                "provider_gender", "provider_entity_type", "provider_street_address_1", "provider_street_address_2",
@@ -113,8 +113,11 @@ def readCSV():
              ('percent_of_beneficiaries_identified_with_schizophrenia_other_psychotic_disorders', np.float64),
              ('percent_of_beneficiaries_identified_with_stroke', np.float64),
              ('average_HCC_risk_score_of_beneficiaries', np.float64)]
-    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=['']) # DataFrame loaded from CSV
-
+    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=[''], chunksize=200000, iterator=True)
+    report_lst = []
+    for chunk in rep_reader:
+        report_lst += [chunk]
+    return report_lst
     # #filter for only US states -- Convert to Numpy array
     # state = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
     #          'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK',
@@ -139,7 +142,6 @@ def readCSV():
     # state_df = pd.DataFrame.from_records(state_recarray, columns=columns)
     # state_df = state_df.replace(to_replace='', value=np.nan)
     # # state_df.to_csv(path_or_buf=os.path.join(get_path(), 'CMS_Aggregate_Report.csv'), index=False)
-    return rep_reader
 
 
 def readPUF():
