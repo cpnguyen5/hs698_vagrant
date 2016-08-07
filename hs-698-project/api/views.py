@@ -137,6 +137,7 @@ def map():
     state_costs_df.to_csv(cancer_cost_path, sep='\t', header=col)
 
     #histogram
+    plt.figure()
     rows_dist = db.session.query(Report.percent_of_beneficiaries_identified_with_cancer).all()
     dist_df = pd.DataFrame(rows_dist, columns=['cancer_distribution']).dropna()
 
@@ -255,7 +256,6 @@ def risks():
     mortbar_plot.set(title='Average Mortality Rate by Race')
     mortbar_path = os.path.join(get_abs_path(), 'static', 'tmp', 'mort_bar.png')
     mortbar_plot.figure.savefig(mortbar_path, transparent=True)  # save figure
-
     plt.close()
 
     #annual mortality rate
@@ -533,7 +533,7 @@ def procedure():
     h.set_title('Histogram of Unique CMS Services & Procedures Provided', fontsize=18)
     h_path = os.path.join(get_abs_path(), 'static', 'tmp', 'hcpcs_dist.png')
     h.figure.savefig(h_path, transparent=True)  # save figure
-
+    plt.close()
     hcpcs_median = int(hcpcs_dist['number_of_HCPCS'].median())
     hcpcs_mean = int(hcpcs_dist['number_of_HCPCS'].mean())
     hcpcs_mode = scipy.stats.mode(hcpcs_dist['number_of_HCPCS'].as_matrix().flatten())[0][0]
@@ -593,6 +593,7 @@ def procedure():
                                                        'total_medical_costs', 'total_drug_costs'])
 
     service_corr = service_cost_df.corr()
+    plt.figure()
     sns.set(style='white', font_scale=1.5)
     mask = np.zeros_like(service_corr, dtype=bool)
     mask[np.triu_indices_from(mask)] = True
@@ -601,6 +602,7 @@ def procedure():
     servicecorr_plot = sns.heatmap(service_corr, mask=mask, cmap=cmap, ax=ax)
     scorr_path = os.path.join(get_abs_path(), 'static', 'tmp', 'heatmap_service.png')
     servicecorr_plot.figure.savefig(scorr_path, transparent=True)
+    plt.close()
     return render_template("cost_hcpcs.html", unique_fig=url_for('static', filename='tmp/hcpcs_dist.png'),
                            pie_fig=url_for('static', filename='tmp/num_pie.png'), total_serv =total_data,
                            median=hcpcs_median, avg=hcpcs_mean, mode=hcpcs_mode, freq_serv=freq_serv, exp_serv=exp_serv,

@@ -18,4 +18,5 @@ class ProductionConfig(BaseConfig):
     DEBUG=False
     # SQLALCHEMY_DATABASE_URI = "postgresql://postgres1:abcd1234@localhost/cms_post1"
     # SQLALCHEMY_DATABASE_URI = "postgresql://pg:abcd1234@hs698-cms.ckop501geaet.us-west-2.rds.amazonaws.com:5432/cms_post"
-    SQLALCHEMY_DATABASE_URI = "postgresql://pg:abcd1234@hs698-cmsv2.ckop501geaet.us-west-2.rds.amazonaws.com:5432/cms_postv2"
+    # SQLALCHEMY_DATABASE_URI = "postgresql://pg:abcd1234@hs698-cmsv2.ckop501geaet.us-west-2.rds.amazonaws.com:5432/cms_postv2"
+    SQLALCHEMY_DATABASE_URI = "postgresql://pg:abcd1234@hs698-cmsv4.ckop501geaet.us-west-2.rds.amazonaws.com:5432/cms_postv4"

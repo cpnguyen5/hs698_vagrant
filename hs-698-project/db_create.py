@@ -15,7 +15,7 @@ print "Table(s) schema created, inserting data..."
 # Insert Data -- Bulk insert of DataFrame
 ## Insert Report CSV -- Report Table
 df_report = project.readCSV()
-for elem in df_report[1:]:
+for elem in df_report:
     elem.to_sql('report', engine, if_exists='append', index=False)
     db.session.commit()
     print count
