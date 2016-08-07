@@ -180,7 +180,7 @@ def readPUF():
     #read in CSV in chunks -- chunks of rows
     csv_path= os.path.join(get_path(),
                            'Medicare_Provider_Utilization_and_Payment_Data__Physician_and_Other_Supplier_PUF_CY2014.csv')
-    reader = pd.read_csv(csv_path, iterator=True, chunksize=500000, na_values='', names=puf_columns, dtype=puf_types,
+    reader = pd.read_csv(csv_path, iterator=True, chunksize=100000, na_values='', names=puf_columns, dtype=puf_types,
                          usecols=sel, header=0)
     #accumulate chunks in list
     pd_lst=[]

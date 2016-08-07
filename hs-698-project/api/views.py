@@ -153,10 +153,9 @@ def map():
     irq = q3 - q1
     outlier = {'upper': q3 + 1.5 * irq, 'lower': q3 - 1.5 * irq} #calculate upper & lower bound outliers
 
-    cnt = db.session.query(func.count(Report.npi)).all()
     return render_template("map.html", d_state=dict_state, rows=state_lst, us_avg=us_avg, outlier=outlier,
                            low_cost = lowest_state_costs, high_cost = highest_state_costs, max_state=max_state,
-                           min_state=min_state, cnt = cnt,
+                           min_state=min_state,
                            chist_fig=url_for('static', filename='tmp/cancer_dist.png'),
                            js_file=url_for('static', filename='js/datamaps.usa.min.js'),
                            cancer_js = url_for('static', filename='js/cancer.v3.min.js'),
