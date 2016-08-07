@@ -8,27 +8,43 @@ import urllib3
 
 
 def get_path():
+    """
+    This function takes no parameters and returns the api/dataset directory pathway.
+    :return: api/dataset directory pathway
+    """
     f_name = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'api', 'dataset')
     return f_name
 
 
 def download(url, path):
+    """
+    This function takes 2 parameters, URL with CSV file and pathway to save the CSV file. The function utilizes the
+    urllib3 library to download the CSV file from the URL and save it in the specified path.
+    :param url: URL containing CSV file
+    :param path: pathway to save CSV file
+    :return: None
+    """
     http = urllib3.PoolManager()
-    r = http.request('GET', url, preload_content=False)
+    r = http.request('GET', url, preload_content=False) # open URL
     with open(path, 'wb') as output:
         while True:
             data = r.read(1024)
             if not data:
                 break
-            output.write(data)
-
-    r.release_conn()
+            output.write(data) # load
+    r.release_conn() # end request connection
     return
 
 
 def readCSV():
+    """
+    This function takes no parameters and returns the CMS Aggregrate Report CSV file as a DataFrame. If the CSV file
+    does not yet exist locally, the function will download the CSV file implementing the urllib3 package.
+    :return: DataFrame of 'Report' CSV file
+    """
     # f='Medicare_Physician_and_Other_Supplier_National_Provider_Identifier__NPI__Aggregate_Report__Calendar_Year_2014.csv'
-    f = 'CMS_Aggregate_Report.csv'
+    f = 'CMS_Aggregate_Report.csv' # pre-modified CSV file -- workaround memory error in AWS
+    # Check for existing local CSV file
     f_path = os.path.join(get_path(), f)
     if not os.path.isfile(f_path):
         print "Downloading Report CSV file -- download may take awhile..."
@@ -113,7 +129,10 @@ def readCSV():
              ('percent_of_beneficiaries_identified_with_schizophrenia_other_psychotic_disorders', np.float64),
              ('percent_of_beneficiaries_identified_with_stroke', np.float64),
              ('average_HCC_risk_score_of_beneficiaries', np.float64)]
-    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=[''], chunksize=100000, iterator=True, low_memory=False)
+    # Parse large CSV into chunks of DataFrames
+    rep_reader = pd.read_csv(f_path, sep=',', header=0, na_values=[''], chunksize=100000, iterator=True,
+                             low_memory=False) # DataFrame from CSV -- chunks
+    # List of DataFrame chunks
     report_lst = []
     for chunk in rep_reader:
         report_lst += [chunk]
@@ -145,7 +164,14 @@ def readCSV():
 
 
 def readPUF():
+    """
+    This function takes no parameters and returns the CMS Provider Utilization and Payment Data (PUF) CSV file as a
+    DataFrame. If the CSV file does not yet exist locally, the function will download the CSV file implementing the
+    urllib3 package.
+    :return: DataFrame of 'Puf' CSV file
+    """
     puf_f ='Medicare_Provider_Utilization_and_Payment_Data__Physician_and_Other_Supplier_PUF_CY2014.csv'
+    # Check for existing local CSV file
     puf_path = os.path.join(get_path(), puf_f)
     if not os.path.isfile(puf_path):
         print "Downloading PUF CSV file -- download may take awhile..."
@@ -159,7 +185,6 @@ def readPUF():
                'number_of_medicare_beneficiaries', 'number_of_distinct_medicare_beneficiary_per_day_services',
                'average_medicare_allowed_amount', 'average_submitted_charge_amount', 'average_medicare_payment_amount',
                'average_medicare_standardized_amount']
-
     puf_types = [('npi', np.uint64), ('provider_last_name', 'S20'), ('provider_first_name', 'S20'), ('provider_middle_initial', 'S20'),
              ('provider_credentials', 'S20'),('provider_gender', 'S20'),('provider_entity_type', 'S20'),
              ('provider_street_address_1', 'S20'),('provider_street_address_2', 'S20'),('provider_city', 'S20'),
@@ -170,19 +195,19 @@ def readPUF():
              ('number_of_distinct_medicare_beneficiary_per_day_services', np.float64),
              ('average_medicare_allowed_amount', np.float64),('average_submitted_charge_amount', np.float64),
              ('average_medicare_payment_amount', np.float64),('average_medicare_standardized_amount', np.float64)]
-
+    # select non-repetitive columns
     sel = ['npi', 'place_of_service', 'HCPCS_code', 'HCPCS_description',
            'identifies_HCPCS_as_drug_included_in_the_ASP_drug_list', 'number_of_services',
            'number_of_medicare_beneficiaries', 'number_of_distinct_medicare_beneficiary_per_day_services',
            'average_medicare_allowed_amount', 'average_submitted_charge_amount', 'average_medicare_payment_amount',
            'average_medicare_standardized_amount']
 
-    #read in CSV in chunks -- chunks of rows
+    # Parse large CSV into chunks of DataFrames
     csv_path= os.path.join(get_path(),
                            'Medicare_Provider_Utilization_and_Payment_Data__Physician_and_Other_Supplier_PUF_CY2014.csv')
     reader = pd.read_csv(csv_path, iterator=True, chunksize=100000, na_values='', names=puf_columns, dtype=puf_types,
                          usecols=sel, header=0)
-    #accumulate chunks in list
+    # List of DataFrame chunks
     pd_lst=[]
     for chunk in reader:
         pd_lst+=[chunk]
@@ -190,14 +215,21 @@ def readPUF():
 
 
 def readBCH():
+    """
+    This function takes no parameters and returns the Big Cities Health Coalition CSV file as a DataFrame. If the CSV
+    file does not yet exist locally, the function will download the CSV file implementing the urllib3 package.
+    :return: DataFrame of 'Cancer' CSV file
+    :return:
+    """
     bch_f ='cancer_state.csv'
+    # Check for existing local CSV file
     bch_path = os.path.join(get_path(), bch_f)
     if not os.path.isfile(bch_path):
         print "Downloading Cancer CSV file -- download may take awhile..."
         download('https://opendata.socrata.com/api/views/mqh4-spnv/rows.csv?accessType=DOWNLOAD', bch_path)
         print "Cancer CSV download complete"
     columns = ['indicator', 'year', 'gender', 'race', 'value', 'place']
-    # type = [('indicator', 'S10'), ('year', np.uint64), ('gender', 'S10'), ('race', 'S10'), ('value', np.float64), ('place'. 'S50')]
+    # Parse CSV into DataFrame
     df = pd.read_csv(os.path.join(get_path(), 'cancer_state.csv'), sep=',', names=columns, header=0, na_values='')
     df['place']=df['place'].apply(lambda x: x[-2:]) #filter for only state code
     return df

@@ -1,17 +1,17 @@
 	disease	frequency
-0	Cancer	0.1358
+0	Cancer	0.136
 1	A-Fib	0.1473
 2	Alzheimers	0.1617
 3	Asthma	0.1065
-4	Heart Fail	0.2582
-5	Kidney Dis	0.303
-6	Pulmonary Dis	0.2079
-7	Depression	0.3055
+4	Heart Fail	0.2584
+5	Kidney Dis	0.3034
+6	Pulmonary Dis	0.2081
+7	Depression	0.3053
 8	Diabetes	0.3628
-9	Hyperlipidemia	0.5706
-10	Hypertension	0.6705
-11	Ischemic Heart Dis	0.3961
+9	Hyperlipidemia	0.571
+10	Hypertension	0.6709
+11	Ischemic Heart Dis	0.3963
 12	Osteoporosis	0.0994
-13	Rheumatoid Arthritis	0.4409
-14	Schizophrenia	0.0933
-15	Stroke	0.085
+13	Rheumatoid Arthritis	0.4411
+14	Schizophrenia	0.0931
+15	Stroke	0.0848

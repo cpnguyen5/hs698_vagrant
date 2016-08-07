@@ -24,7 +24,7 @@ df_puf = project.readPUF()
 for elem in df_puf:
     elem.to_sql('puf', engine, if_exists='append', index=False)
     db.session.commit()
-# Insert BCHC CSV -- Cancer Table
+## Insert BCHC CSV -- Cancer Table
 df_can = project.readBCH()
 df_can.to_sql('cancer', engine, if_exists='append', index=False)
 

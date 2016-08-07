@@ -88,8 +88,9 @@
         <script src= {{ cancer_js }}></script>
         <script src= {{ topo_js }}></script>
         <script src= {{ js_file }}></script>
-      <div id="container" style="position: relative; width: 1500px; height: 750px; left: 155px; top: 0px; bottom: 50px"></div>
 
+      <div id="container" style="position: relative; width: 1500px; height: 750px; left: 155px; top: 0px; bottom: 50px"></div>
+        <div align="center">
          <script>
            var map = new Datamap({
                 element: document.getElementById('container'),
@@ -311,7 +312,7 @@
             }
             });
          </script>
-
+        </div>
     </div>
     <div class="container">
         <h2 align="center">Distribution of Cancer Prevalence Amongst CMS Beneficiaries</h2>
@@ -383,6 +384,7 @@
     <div class="container text-right">
         <label><input type="checkbox"> Sort values</label>
         <script src={{ cancer_js }}></script>
+        <div align="center">
         <script>
 
             var margin = {top: 20, right: 20, bottom: 30, left: 300},
@@ -479,7 +481,7 @@
             });
 
      </script>
-
+        </div>
     </div>
     <div class="container text-right">
         <h3 align="center">States with Lowest CMS Costs</h3>
