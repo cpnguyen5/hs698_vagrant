@@ -1,5 +1,5 @@
 cffi==1.7.0
-cryptography==1.4
+cryptography==3.2
 ecdsa==0.13
 enum34==1.1.6
 Fabric==1.11.1
