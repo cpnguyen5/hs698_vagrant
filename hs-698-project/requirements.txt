@@ -13,7 +13,7 @@ MarkupSafe==0.23
 matplotlib==1.5.1
 numpy==1.11.0
 pandas==0.18.1
-paramiko==1.17.2
+paramiko==2.10.1
 pbr==1.10.0
 psycopg2==2.6.2
 pycrypto==2.6.1
